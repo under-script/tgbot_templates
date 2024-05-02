@@ -6,6 +6,9 @@ async def set_commands(bot: Bot):
     commands_list = [
         ["start", "Botni ishga tushurish"],
         ["help", "Yordam"],
+        ["info"],
+        ["info_html"],
+        ["info_markdown"],
     ]
     commands = [
         BotCommand(
