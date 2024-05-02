@@ -9,14 +9,11 @@ from aiogram.fsm.storage.redis import RedisStorage, DefaultKeyBuilder
 from tgbot.config import load_config, Config
 from tgbot.handlers import routers_list
 from tgbot.middlewares.config import ConfigMiddleware
-from tgbot.services import broadcaster
+from tgbot.services.notify_admins import on_startup_notify
+from tgbot.services.set_bot_commands import set_commands
 
 
-async def on_startup(bot: Bot, admin_ids: list[int]):
-    await broadcaster.broadcast(bot, admin_ids, "Bot ishga tushirildi")
-
-
-def register_global_middlewares(dp: Dispatcher, config: Config, session_pool=None):
+def register_global_middlewares(dp: Dispatcher, config: Config):
     """
     Register global middlewares for the given dispatcher.
     Global middlewares here are the ones that are applied to all the handlers (you specify the type of update)
@@ -24,7 +21,7 @@ def register_global_middlewares(dp: Dispatcher, config: Config, session_pool=Non
     :param dp: The dispatcher instance.
     :type dp: Dispatcher
     :param config: The configuration object from the loaded configuration.
-    :param session_pool: Optional session pool object for the database using SQLAlchemy.
+    # :param session_pool: Optional session pool object for the database using SQLAlchemy.
     :return: None
     """
     middleware_types = [
@@ -95,7 +92,8 @@ async def main():
 
     register_global_middlewares(dp, config)
 
-    await on_startup(bot, config.tg_bot.admin_ids)
+    await set_commands(bot)
+    await on_startup_notify(bot, config.tg_bot.admin_ids)
     await dp.start_polling(bot)
 
 
