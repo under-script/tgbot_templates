@@ -1,22 +1,23 @@
 from aiogram import types, Router
 from aiogram.enums import ParseMode
 from aiogram.filters import Command
-
-from aiogram.utils.markdown import hbold, hcode, hitalic, hunderline, hstrikethrough, hlink
+from aiogram.utils.formatting import Bold, Text, Italic, Underline, Strikethrough, TextLink, Code
 
 info_router = Router()
 
 
 @info_router.message(Command('info'))
 async def bot_info(message: types.Message):
-    text = f"Assalom alaykum, {message.from_user.full_name}\n"
-    text += "Bu " + hbold('qalin matn.\n')
-    text += "Bu esa " + hitalic('egri matn.\n')
-    text += "Bu " + hunderline('ostiga chizilgan matn.\n')
-    text += "Bu esa " + hstrikethrough("o'chirilgan matn.\n")
-    text += "Bu esa " + hlink('Mohirdev sahifasiga link\n', 'https://mohirdev.uz')
-    text += "Bu esa " + hcode('print("Hello World!")') + " kod\n"
-    await message.answer(text)
+    content = Text(
+        f"Assalom alaykum, {message.from_user.full_name}\n",
+        "Bu ", Bold('qalin matn.\n'),
+        "Bu esa ", Italic('egri matn.\n'),
+        "Bu ", Underline('ostiga chizilgan matn.\n'),
+        "Bu esa ", Strikethrough("o'chirilgan matn.\n"),
+        "Bu esa ", TextLink('Mohirdev sahifasiga link\n', url='https://mohirdev.uz'),
+        "Bu esa ", Code('print("Hello World!")') + " kod\n",
+    )
+    await message.answer(**content.as_kwargs())
 
 
 @info_router.message(Command('info_html'))
@@ -29,7 +30,7 @@ async def bot_info(message: types.Message):
     text += "Bu esa <a href='https://mohirdev.uz'>Mohirdev sahifasiga link</a>.\n"
     text += "Bu esa <code>print('Hello World!')</code> kod.\n"
 
-    await message.answer(text)
+    await message.answer(text, parse_mode=ParseMode.HTML)
 
 
 @info_router.message(Command('info_markdown'))
