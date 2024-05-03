@@ -1,7 +1,4 @@
-from aiogram import types, Router, F
-from aiogram.filters import StateFilter
-from aiogram.fsm.context import FSMContext
-from aiogram.utils.markdown import hcode
+from aiogram import types, Router
 
 echo_router = Router()
 
